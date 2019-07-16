@@ -2,13 +2,15 @@ import React from 'react';
 import './App.css';
 import Header from './components/layout/Header';
 import Main from './components/main/Main';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 function App() {
   return (
-    <React.Fragment>
+    <Provider store={store}>
       <Header />
       <Main />
-    </React.Fragment>
+    </Provider>
   );
 }
 
