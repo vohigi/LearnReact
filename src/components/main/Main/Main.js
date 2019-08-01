@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import Todo from './Todo';
+import Todo from '../Todo';
 import uuid from 'uuid';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { GET_TODOS } from '../../redux/actions/types';
-import TextInput from './TextInput';
+import { getTodos, addTodo } from '../../../redux/actions/todoActions';
+import TextInput from '../Input/TextInput';
 import Submit from './Submit';
-
-// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 class Main extends Component {
   state = {
@@ -19,29 +17,20 @@ class Main extends Component {
     const value = this.state.value;
     if (value === '') {
       this.setState({ errors: { value: 'To Do is required' } });
+      return;
     }
+    const newTodo = {
+      id: uuid(),
+      value: value,
+      state: 'ACTIVE'
+    };
+    this.props.addTodo(newTodo);
     this.setState({
       value: '',
-      errors: {},
-      todos: [
-        ...this.state.todos,
-        {
-          id: uuid(),
-          value: value
-        }
-      ]
+      errors: {}
     });
   };
-  changeHadler = e => {
-    this.setState({ value: e.target.value });
-  };
-  deleteClickHandler = id => {
-    this.setState({
-      ...this.state,
-      todos: this.state.todos.filter(todo => todo.id !== id)
-    });
-    console.log(this.state.todos.filter(todo => todo.id !== id));
-  };
+  changeHadler = e => this.setState({ [e.target.name]: e.target.value });
   componentDidMount() {
     this.props.getTodos();
   }
@@ -51,15 +40,18 @@ class Main extends Component {
       <div className="container">
         <h1 className="center-align">TO DO</h1>
 
-        <TextInput id="todo-input" placeholder="Enter Task Here" name="todo" />
-        <Submit />
+        <TextInput
+          id="todo-input"
+          placeholder="Enter Task Here"
+          name="value"
+          changeHadler={this.changeHadler}
+          value={value}
+          error={errors.value}
+        />
+        <Submit clickHandler={this.submitClickHandler} />
         <div className="row">
           {this.props.todos.map(todo => (
-            <Todo
-              key={todo.id}
-              todo={todo}
-              deleteClickHandler={this.deleteClickHandler}
-            />
+            <Todo key={todo.id} todo={todo} />
           ))}
         </div>
       </div>
@@ -73,10 +65,8 @@ Main.propTypes = {
 const mapStateToProps = state => ({
   todos: state.todo.todos
 });
-const mapDispatchToProps = dispatch => ({
-  getTodos: () => dispatch({ type: GET_TODOS })
-});
+
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { getTodos, addTodo }
 )(Main);
