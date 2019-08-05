@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './style.scss';
 
 const TodoItem = ({
   id,
@@ -9,20 +10,21 @@ const TodoItem = ({
   deleteClickHandler
 }) => {
   return (
-    <div className="card col s6 offset-s3">
-      <p className="card-content">
+    //col s6 offset-s3
+    <li className='card collection-item mg-b'>
+      <p className='card-content'>
         {value}
-        <span className="right">{state}</span>
+        <span className='right'>{state}</span>
       </p>
-      <div className="card-action">
-        <button className="btn right" onClick={doneClickHandler}>
+      <div className='card-action'>
+        <button className='btn right' onClick={() => doneClickHandler()}>
           Done
         </button>
-        <button className="btn" onClick={deleteClickHandler(id)}>
+        <button className='btn' onClick={() => deleteClickHandler(id)}>
           Delete
         </button>
       </div>
-    </div>
+    </li>
   );
 };
 TodoItem.propTypes = {

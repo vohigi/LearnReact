@@ -1,0 +1,9 @@
+.collection-item.mg-b {
+  margin-bottom: 15px;
+}
+.collection-item.mg-b:only-child {
+  margin-bottom: 0px;
+}
+.collection-item.mg-b:last-child {
+  margin-bottom: 0px;
+}

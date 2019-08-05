@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import Todo from '../Todo';
 import uuid from 'uuid';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getTodos, addTodo } from '../../../redux/actions/todoActions';
+import {
+  getTodos,
+  addTodo,
+  deleteTodo
+} from '../../../redux/actions/todoActions';
 import TextInput from '../Input/TextInput';
-import Submit from './Submit';
+import Submit from '../Submit/Submit';
+import ToDoList from '../ToDoList/ToDoList';
 
 class Main extends Component {
   state = {
@@ -30,43 +34,36 @@ class Main extends Component {
       errors: {}
     });
   };
-  changeHadler = e => this.setState({ [e.target.name]: e.target.value });
-  componentDidMount() {
-    this.props.getTodos();
-  }
+  changeHadler = ({ target: { name, value } }) =>
+    this.setState({ [name]: value });
+  // componentDidMount() {
+  //   this.props.getTodos();
+  // }
   render() {
     const { value, errors } = this.state;
+    const { todos, deleteTodo } = this.props;
     return (
-      <div className="container">
-        <h1 className="center-align">TO DO</h1>
+      <div className='container'>
+        <h1 className='center-align'>TO DO</h1>
 
         <TextInput
-          id="todo-input"
-          placeholder="Enter Task Here"
-          name="value"
+          id='todo-input'
+          placeholder='Enter Task Here'
+          name='value'
           changeHadler={this.changeHadler}
           value={value}
           error={errors.value}
         />
         <Submit clickHandler={this.submitClickHandler} />
-        <div className="row">
-          {this.props.todos.map(todo => (
-            <Todo key={todo.id} todo={todo} />
-          ))}
-        </div>
+        <ToDoList todoList={todos} removeTask={deleteTodo} />
       </div>
     );
   }
 }
-Main.propTypes = {
-  todos: PropTypes.array.isRequired,
-  getTodos: PropTypes.func.isRequired
-};
-const mapStateToProps = state => ({
-  todos: state.todo.todos
-});
 
 export default connect(
-  mapStateToProps,
-  { getTodos, addTodo }
+  ({ todo: { todos } }) => ({
+    todos
+  }),
+  { getTodos, addTodo, deleteTodo }
 )(Main);

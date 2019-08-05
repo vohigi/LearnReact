@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TodoItem from '../ToDoItem/TodoItem';
 
 const ToDoList = ({ todoList, completeTask, removeTask }) => (
-  <ul>
+  <ul className='collection'>
     {todoList.map(({ id, value, state }) => (
       <TodoItem
         doneClickHandler={completeTask}
@@ -17,13 +17,13 @@ const ToDoList = ({ todoList, completeTask, removeTask }) => (
   </ul>
 );
 ToDoList.propTypes = {
-  tasksList: PropTypes.array,
+  todoList: PropTypes.array,
   removeTask: PropTypes.func,
   completeTask: PropTypes.func
 };
 
 ToDoList.defaultProps = {
-  tasksList: [],
+  todoList: [{ id: '444', value: 'default prop', state: 'ACTIVE' }],
   removeTask: () => {},
   completeTask: () => {}
 };
